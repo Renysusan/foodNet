@@ -1,0 +1,30 @@
+{% extends "recipes/recipe_base.html" %}
+
+{% block recipe %}
+<div class="row justify-content-center"><h1>{{ recipe.dish_title }}</h1><</div>
+<div class="row justify-content-center"><img src="{{ recipe.dish_image.url }}" height=400 width=400/></div>
+
+<br/>
+<div class="row justify-content-start"> 
+<h5> Cooking Time: {{ recipe.cooking_time }}</h5>
+<p>{{ recipe.method }}</p> </div>
+<p>
+	<a href="{% url 'recipes:for_user' username=recipe.user.username %}">@{{ recipe.user.username }}</a>
+	<time class="time"><a href="{% url 'recipes:single' username=recipe.user.username pk=recipe.pk %}">{{ recipe.created_at }}</a></time>
+</p>
+</div>
+
+<br/>
+<div class="d-flex">
+	{% if user.is_authenticated and recipe.user == user and not hide_delete %}
+		<div class="p-2"><a href="{% url 'recipes:update' pk=recipe.pk %}"><button class="btn btn-primary btn-lg"> Update </button></a></div>
+		<div class="p-2"><a href="{% url 'recipes:delete' pk=recipe.pk %}" title="delete" class="btn btn-danger btn-lg"> <span class="oi oi-delete"></span> Delete</a></div>
+	{% endif %}
+	<div class="ml-auto p-2"><a href="javascript:{document.getElementById('upvote').submit()}"><button class="btn btn-success btn-lg"><span class="oi oi-caret-top"></span> Upvote {{ recipe.votes_total }}</button></a></div>
+</div>
+
+<form id="upvote" method="POST" action="{% url 'recipes:upvote' pk=recipe.pk %}">
+	{% csrf_token%}
+	<input type="hidden">
+</form>
+{% endblock %}

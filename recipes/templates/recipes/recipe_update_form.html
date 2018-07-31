@@ -1,0 +1,13 @@
+{% extends "recipes/recipe_base.html" %}
+
+{% load bootstrap4 %}
+
+{% block recipe %}
+<h4>Update Recipe</h4>
+<form method="POST" action="{% url 'recipes:update' pk=recipe.pk%}" id="recipeForm" enctype="multipart/form-data">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	<input type="submit" value="Update Recipe" class="btn btn-primary btn-large">
+</form>
+
+{% endblock %}

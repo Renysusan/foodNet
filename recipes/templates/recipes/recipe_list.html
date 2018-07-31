@@ -1,0 +1,38 @@
+{% extends "recipes/recipe_base.html" %}
+{% load humanize %}
+
+{% block recipe %}
+<div class="col-md-4">
+	{% if request.user.is_authenticated %}
+	<div class="card card-with-shadow">
+		<div class="content">
+			<h5 class="title">Your Cuisines</h5>
+			<ul class="list-unstyled">
+				{% for member_cuisine in get_user_cuisines %}
+				<li class="group li-with-bullet">
+					<a href="{% url 'cuisines:single' slug=member_cuisine.cuisine.slug %}">{{ member_cuisine.cuisine.name }}</a>
+				</li>
+				{% endfor %}
+
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+	<div class="card card-with-shadow">
+		<div class="content">
+			<h5 class="title">All Cuisines</h5>
+			<ul class="list-unstyled">
+				{% for other_cuisine in get_other_cuisines %}
+					<li class="group li-with-bullet"><a href="{% url 'cuisines:single' slug=other_cuisine.slug %}">{{ other_cuisine.name }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-8">
+	{% for recipe in recipe_list %}
+  		{% include "recipes/_recipe.html" %}
+	{% endfor %}
+</div>
+{% endblock %}

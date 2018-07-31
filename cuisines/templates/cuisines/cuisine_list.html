@@ -1,0 +1,41 @@
+{% extends "cuisines/cuisine_base.html" %}
+
+{% block cuisinecontent %}
+<div class="row">
+	<div class="col-md-4">
+		<div class="content">
+			{% if user.is_authenticated %}
+			<h2>
+				Welcome back
+				<a href="{% url 'recipes:for_user' username=user.username %}">@{{user.username }}</a> 
+			</h2>
+			{% endif %}
+			<p>Welcome to the Cuisines Page! Select a Cuisine with a shared interest!</p>
+		</div>
+		{% if user.is_authenticated %}
+		<a href="{% url 'cuisines:create' %}" class="btn btn-md btn-fill btn-warning">Create New Cuisine!</a>
+		{% endif %}
+	</div>
+
+	<div class="col-md-8">
+		<div class="list-group">
+			{% for cuisine in object_list %}
+			<a class="list-group-item" href="{% url 'cuisines:single' slug=cuisine.slug %}">
+				<h3>{{ cuisine.name }}</h3>
+				<div class="container-fluid">
+					{{ cuisine.description_html|safe }}
+					<div class="row">
+						<div class="col-md-4">
+							<span class="badge">{{ cuisine.members.count }}</span> member{{ cuisine.members.count|pluralize }}
+						</div>
+						<div class="col-md-4">
+							<span class="badge">{{ cuisine.recipes.count }}</span> recipe{{ cuisine.recipes.count|pluralize }}
+						</div>
+					</div>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

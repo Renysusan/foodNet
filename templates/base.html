@@ -1,0 +1,48 @@
+    <!DOCTYPE html>
+    {% load staticfiles %}
+    <html>
+      <head>
+        <meta charset="utf-8">
+
+        <title>Food Net</title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'foodnet/master.css'%}">
+        <link href="{% static 'open-iconic-master/font/css/open-iconic-bootstrap.css' %}" rel="stylesheet">
+
+      </head>
+
+      <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    		  <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <img src="{% static 'logo.png' %}" height=35 width=35 class="d-inline-block alighn-top"/> Food Net</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                      <li><a href="{% url 'recipes:create' %}" class="btn btn-simple">Add Recipe</a></li>
+                      <li><a href="{% url 'cuisines:create' %}" class="btn btn-simple">Add Cuisine</a></li>
+                      <li><a href="{% url 'cuisines:all' %}" class="btn btn-simple">All Cuisines</a></li>
+                      <li><a href="{% url 'useraccounts:logout' %}" class="btn btn-simple">Log out</a></li>
+                {% else %}
+                      <li><a href="{% url 'cuisines:all' %}"class="btn btn-simple">Cuisines</a></li>
+                      <li><a href="{% url 'useraccounts:login' %}" class="btn btn-simple">Log in</a></li>
+                      <li><a href="{% url 'useraccounts:signup' %}" class="btn btn-simple">Sign up</a></li>
+                {% endif %}
+              </ul>  
+            </div>
+            </div>
+    			</div>
+    		</nav>
+        <br/>
+        <div class="container mycontent">
+          {% block content %}
+
+          {% endblock %}
+        </div>
+      </body>
+    </html>

@@ -1,0 +1,25 @@
+<div class="container">
+	<h1>{{ recipe.dish_title }} </h1>
+	<img class="img-fluid" src="{{ recipe.dish_image.url }}" height=300 width=300/>
+	<h5>{{ recipe.cooking_time }}</h5>
+	<p>{{ recipe.method }}</p>
+	<p>
+		<span class="username"><a href="{% url 'recipes:for_user' username=recipe.user.username %}">@{{ recipe.user.username }}</a></span>
+
+		<time class="time"><a href="{% url 'recipes:single' username=recipe.user.username pk=recipe.pk %}">{{ recipe.created_at }}</a></time>
+
+		
+		<a href="javascript:{document.getElementById('upvote').submit()}"><button class="btn btn-primary btn-lg"><span class="oi oi-caret-top"></span> Upvote {{ recipe.votes_total }}</button></a>
+	</p>
+	
+	<form id="upvote" method="POST" action="{% url 'recipes:upvote' pk=recipe.pk %}">
+		{% csrf_token%}
+		<input type="hidden">
+	</form>
+
+	<!-- Only if it is the same user that posted the recipe allow them to update and delete the recipe -->
+	{% if user.is_authenticated and recipe.user == user and not hide_delete %}
+		<a href="{% url 'recipes:update' pk=recipe.pk %}"><button class="btn btn-primary btn-lg">Update </button></a>
+		<a href="{% url 'recipes:delete' pk=recipe.pk %}" title="delete"><button class="btn btn-danger btn-lg">Delete</a>
+	{% endif %}
+</div>

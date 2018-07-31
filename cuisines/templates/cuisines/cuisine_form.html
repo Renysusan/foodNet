@@ -1,0 +1,13 @@
+{% extends "cuisines/cuisine_base.html" %}
+{% load bootstrap4 %}
+
+{% block cuisinecontent %}
+<div class="container">
+	<h4>Create A New Cuisine</h4>
+	<form method="POST" action="{% url 'cuisines:create' %}" id="cuisineForm">
+		{% csrf_token %}
+		{% bootstrap_form form %}
+		<input type="submit" value="Create" class="btn btn-primary btn-large">
+	</form>
+</div>
+{% endblock %}

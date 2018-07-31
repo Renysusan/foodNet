@@ -1,0 +1,55 @@
+{% extends "cuisines/cuisine_base.html" %}
+
+{% block cuisinecontent %}
+<div class = "container">
+
+	<!-- If user is not a member of a cuisine give him the option to join, else to leave -->
+	<div class="row justify-content-end">
+		<div class="col-2"><h1><font size="7" color="red">{{cuisine.name}}</font></h1></div>
+		<div class="col-2">
+			{% if user in cuisine.members.all %}
+			<a href="{% url 'cuisines:leave' slug=cuisine.slug %}" class="btn btn-lg btn-fill btn-warning"> Leave </a>
+			{% else %}
+			<a href="{% url 'cuisines:join' slug=cuisine.slug %}" class="btn btn-lg btn-fill btn-warning"> Join </a>
+			{% endif %}
+		</div>
+	</div>
+
+	<br/>
+
+	{% if cuisine.recipes.count == 0 %}
+	<h2>No recipes in this cuisine yet!</h2>
+	{% else %}
+	{% for recipe in cuisine.recipes.all %}
+	<div class="row justify-content-center"><h1> <font color="green"> {{ recipe.dish_title }} </font></h1></div>
+	<div class="row justify-content-center"><img src="{{ recipe.dish_image.url }}" height=400 width=400/></div>
+
+	<br/>
+	<div class="row justify-content-start"> 
+		<h5> Cooking Time: {{ recipe.cooking_time }}</h5>
+		<p>{{ recipe.method }}</p> 
+		<p>
+			<a href="{% url 'recipes:for_user' username=recipe.user.username %}">@{{ recipe.user.username }}</a>
+			<time class="time"><a href="{% url 'recipes:single' username=recipe.user.username pk=recipe.pk %}">{{ recipe.created_at }}</a></time>
+		</p>
+	</div>
+
+	<br/>
+	<div class="d-flex">
+		<!-- Allow deletion and updates only if it is by the same user that created the recipe -->
+		{% if user.is_authenticated and recipe.user == user and not hide_delete %}
+		<div class="p-1"><a href="{% url 'recipes:update' pk=recipe.pk %}"><button class="btn btn-primary btn-lg"> Update </button></a></div>
+		<div class="p-1"><a href="{% url 'recipes:delete' pk=recipe.pk %}" title="delete" class="btn btn-danger btn-lg"> <span class="oi oi-delete"></span> Delete</a></div>
+		{% endif %}
+		<div class="ml-auto p-2"><a href="javascript:{document.getElementById('upvote').submit()}"><button class="btn btn-success btn-lg"><span class="oi oi-caret-top"></span> Upvote {{ recipe.votes_total }}</button></a></div>
+	</div>
+
+	<form id="upvote" method="POST" action="{% url 'recipes:upvote' pk=recipe.pk %}">
+		{% csrf_token%}
+		<input type="hidden">
+	</form>
+	</br>
+	{% endfor %}
+	{% endif %}
+</div>
+{% endblock %}

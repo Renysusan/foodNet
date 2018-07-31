@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="jumbotron text-center">
+<div class="container">
+  <h1>You are now logged in!</h1>
+  <h2><a href="{% url 'cuisines:all'%}">Go to Cuisines</a></h2>
+</div>
+</section>
+{% endblock %}
